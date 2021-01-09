@@ -1,5 +1,6 @@
 
 import {createUseStyles} from 'react-jss';
+import {useEffect, useState, createRef} from 'react';
 
 const useStyles = createUseStyles({
   root: {
@@ -48,8 +49,26 @@ const useStyles = createUseStyles({
 });
 
 function App() {
+  const [cursorLeft, setCursorLeft] = useState(10);
+  const [intervalState, setIntervalInState] = useState(null);
+  const rightCoverRef = createRef();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCursorLeft(prevCursorLeft => prevCursorLeft + 10);
+    }, 25);
+
+    setIntervalInState(interval);
+    return () => clearInterval(interval);
+  }, [setIntervalInState]);
+
+  useEffect(() => {
+    if (rightCoverRef.current && rightCoverRef.current.offsetWidth === 0) {
+      clearInterval(intervalState);
+    }
+  }, [rightCoverRef, intervalState]);
+
   const classes = useStyles();
-  const cursorLeft = 10;
   const rightCoverWidthSubtraction = 32 + cursorLeft;
 
   const rightCoverStyle = {
@@ -60,7 +79,7 @@ function App() {
   const cursorStyle = {
     left: cursorLeft
   };
-  
+
   return (
     <div className={classes.root}>
       <div className={classes.paragraph}>
@@ -69,7 +88,8 @@ function App() {
       <div className={classes.bottomCover}/>
       <div 
         className={classes.rightCover}
-        style={rightCoverStyle}/>
+        style={rightCoverStyle}
+        ref={rightCoverRef}/>
       <div 
         className={classes.cursor}
         style={cursorStyle}/>
