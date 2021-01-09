@@ -1,5 +1,6 @@
 
 import {createUseStyles} from 'react-jss';
+import {useState} from 'react';
 import LineCursor from './LineCursor';
 
 const useStyles = createUseStyles({
@@ -36,6 +37,22 @@ const useStyles = createUseStyles({
 });
 
 export default function App() {
+  const [coverBottom, setCoverBottom] = useState(true);
+  const [lineCursorTop, setLineCursorTop] = useState(16);
+  const [lineCursorKey, setLineCursorKey] = useState(0);
+  const [showLineCursor, setShowLineCursor] = useState(true);
+
+  const onLineCursorComplete = () => {
+    setCoverBottom(false);
+    setLineCursorTop(prevLineCursorTop => prevLineCursorTop + 24);
+
+    if (coverBottom) {
+      setLineCursorKey(prevLineCursorKey => prevLineCursorKey + 1);
+    } else {
+      setShowLineCursor(false);
+    }
+  };
+
   const classes = useStyles();
 
   return (
@@ -43,8 +60,15 @@ export default function App() {
       <div className={classes.paragraph}>
         Hi, I’m an A.I. trained to evaluate musical taste. To get started, I’ll need to see your Spotify.
       </div>
-      <div className={classes.bottomCover}/>
-      <LineCursor/>
+      {showLineCursor && 
+        <LineCursor 
+          onComplete={onLineCursorComplete}
+          top={lineCursorTop}
+          key={lineCursorKey}/>
+      }
+      {coverBottom &&
+        <div className={classes.bottomCover}/>
+      }
     </div>
   );
 };
