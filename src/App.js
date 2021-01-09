@@ -49,7 +49,7 @@ const useStyles = createUseStyles({
 });
 
 function App() {
-  const [cursorLeft, setCursorLeft] = useState(10);
+  const [cursorLeft, setCursorLeft] = useState(0);
   const [intervalState, setIntervalInState] = useState(null);
   const rightCoverRef = createRef();
 
