@@ -34,32 +34,45 @@ const useStyles = createUseStyles({
   },
   rightCover: {
     backgroundColor: '#FFF',
-    width: 'calc(100% - 42px)',
     height: 48,
     position: 'absolute',
-    top: 16,
-    left: 10
+    top: 16
   },
   cursor: {
     backgroundColor: '#C4C4C4',
     width: 10,
     height: 18,
     position: 'absolute',
-    top: 19,
-    left: 10
+    top: 19
   }
 });
 
 function App() {
   const classes = useStyles();
+  const cursorLeft = 10;
+  const rightCoverWidthSubtraction = 32 + cursorLeft;
+
+  const rightCoverStyle = {
+    width: "calc(100% - "+rightCoverWidthSubtraction+"px)",
+    left: cursorLeft
+  };
+
+  const cursorStyle = {
+    left: cursorLeft
+  };
+  
   return (
     <div className={classes.root}>
       <div className={classes.paragraph}>
         Hi, I’m an A.I. trained to evaluate musical taste. To get started, I’ll need to see your Spotify.
       </div>
       <div className={classes.bottomCover}/>
-      <div className={classes.rightCover}/>
-      <div className={classes.cursor}/>
+      <div 
+        className={classes.rightCover}
+        style={rightCoverStyle}/>
+      <div 
+        className={classes.cursor}
+        style={cursorStyle}/>
     </div>
   );
 }
