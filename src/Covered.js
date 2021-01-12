@@ -7,7 +7,7 @@ const useStyles = createUseStyles({
     position: 'relative',
     marginLeft: 16
   },
-  paragraph: {
+  line: {
     fontFamily: 'Roboto Mono',
     lineHeight: '24px',
     width: 'calc(100% - 32px)',
@@ -15,7 +15,7 @@ const useStyles = createUseStyles({
       display: 'inline-block',
       content: '""',
       width: 0,
-      height: 32,
+      height: 16,
       verticalAlign: 0
     },
     '&:after': {
@@ -24,6 +24,15 @@ const useStyles = createUseStyles({
       width: 0,
       height: 8,
       verticalAlign: -8
+    }
+  },
+  topLine: {
+    '&:before': {
+      display: 'inline-block',
+      content: '""',
+      width: 0,
+      height: 32,
+      verticalAlign: 0
     }
   },
   bottomCover: {
@@ -35,11 +44,22 @@ const useStyles = createUseStyles({
   }
 });
 
-export default function Convered() {
+export default function Convered(props) {
   const [coverBottom, setCoverBottom] = useState(true);
   const [lineCursorTop, setLineCursorTop] = useState(16);
   const [lineCursorKey, setLineCursorKey] = useState(0);
   const [showLineCursor, setShowLineCursor] = useState(true);
+  const classes = useStyles();
+
+  const lineElements = props.lines.map((line, index) => {
+    let className = classes.line;
+
+    if (index === 0) {
+      className += " "+classes.topLine;
+    }
+
+    return (<div key={index} className={className}>{line}</div>);
+  });
 
   const onLineCursorComplete = () => {
     setCoverBottom(false);
@@ -52,13 +72,9 @@ export default function Convered() {
     }
   };
 
-  const classes = useStyles();
-
   return (
     <div className={classes.root}>
-      <div className={classes.paragraph}>
-        Hi, I’m an A.I. trained to evaluate musical taste. To get started, I’ll need to see your Spotify.
-      </div>
+      {lineElements}
       {showLineCursor && 
         <LineCursor 
           onComplete={onLineCursorComplete}
