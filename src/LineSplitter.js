@@ -3,7 +3,6 @@ import {useState, useEffect, createRef} from 'react';
 
 const useStyles = createUseStyles({
   root: {
-    position: 'relative',
     visibility: 'hidden'
   }
 });
