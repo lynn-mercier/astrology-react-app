@@ -1,5 +1,5 @@
 import {createUseStyles} from 'react-jss';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import LineCursor from './LineCursor';
 
 const useStyles = createUseStyles({
@@ -39,24 +39,35 @@ const useStyles = createUseStyles({
   bottomCover: {
     backgroundColor: '#FFF',
     width: 'calc(100% - 32px)',
-    height: 24,
     position: 'absolute',
     top: 40
   }
 });
 
 export default function Convered(props) {
+  const [bottomCoverHeight, setBottomCoverHeight] = useState(24);
   const [coverBottom, setCoverBottom] = useState(true);
-  const [showCursorTopLine, setShowCursorTopLine] = useState(true);
-  const [playingTopLine, setPlayingTopLine] = useState(true);
-  const [showCursorBottomLine, setShowCursorBottomLine] = useState(false);
-  const [playingBottomLine, setPlayingBottomLine] = useState(false);
+  const [lineIndex, setLineIndex] = useState(0);
+  const [linesStatus, setLinesStatus] = useState([]);
   const classes = useStyles();
+  const lines = props.lines;
 
-  const lineElements = props.lines.map((line, index) => {
+  useEffect(() => {
+    const linesStatusTmp = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      if (i === lineIndex) {
+        linesStatusTmp.push({showCursor: true, playing: true});
+      } else {
+        linesStatusTmp.push({showCursor: false, playing: false});
+      }
+    }
+
+    setLinesStatus(linesStatusTmp);
+  }, [lines, lineIndex]);
+
+  const lineElements = lines.map((line, index) => {
     let onLineCursorComplete;
-    let showCursor;
-    let playing;
     let top;
     let className = classes.line;
 
@@ -64,24 +75,28 @@ export default function Convered(props) {
       className += " "+classes.topLine;
 
       onLineCursorComplete = () => {
+        setLineIndex(prevLineIndex => prevLineIndex + 1);
         setCoverBottom(false);
-        setShowCursorTopLine(false);
-        setPlayingTopLine(false);
-        setShowCursorBottomLine(true);
-        setPlayingBottomLine(true);
       }
 
-      showCursor = showCursorTopLine;
-      playing = playingTopLine;
       top = 16;
     } else {
       onLineCursorComplete = () => {
-        setPlayingBottomLine(false);
+        // setLinesStatus([
+        //   {showCursor: false, playing: false}, 
+        //   {showCursor: true, playing: false}
+        // ]);
       }
 
-      showCursor = showCursorBottomLine;
-      playing = playingBottomLine;
       top = 0;
+    }
+
+    let showCursor = false;
+    let playing = false;
+
+    if (linesStatus[index]) {
+      showCursor = linesStatus[index].showCursor;
+      playing = linesStatus[index].playing;
     }
 
     return (
@@ -100,7 +115,7 @@ export default function Convered(props) {
     <div className={classes.root}>
       {lineElements}
       {coverBottom &&
-        <div className={classes.bottomCover}/>
+        <div className={classes.bottomCover} style={{height: bottomCoverHeight}}/>
       }
     </div>
   );
