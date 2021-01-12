@@ -4,27 +4,7 @@ import {useState, useEffect, createRef} from 'react';
 const useStyles = createUseStyles({
   root: {
     position: 'relative',
-    marginLeft: 16,
     visibility: 'hidden'
-  },
-  paragraph: {
-    fontFamily: 'Roboto Mono',
-    lineHeight: '24px',
-    width: 'calc(100% - 32px)',
-    '&:before': {
-      display: 'inline-block',
-      content: '""',
-      width: 0,
-      height: 32,
-      verticalAlign: 0
-    },
-    '&:after': {
-      display: 'inline-block',
-      content: '""',
-      width: 0,
-      height: 8,
-      verticalAlign: -8
-    }
   }
 });
 
@@ -41,7 +21,7 @@ export default function LineSplitter(props) {
   }, [words, spaceIndex]);
 
   useEffect(() => {
-    if (ref.current && ref.current.offsetHeight === 40) {
+    if (ref.current && ref.current.offsetHeight < 24+1) {
       if (spaceIndex < words.length) {
         setSpaceIndex(prevSpaceIndex => prevSpaceIndex + 1);
       } else if (!emittedLine) {
@@ -55,12 +35,11 @@ export default function LineSplitter(props) {
   }, [ref, text, words, spaceIndex, onLineSplit, emittedLine]);
 
   const classes = useStyles();
+  const className = classes.root+" "+props.className;
 
   return (
-    <div className={classes.root}>
-      <div className={classes.paragraph} ref={ref}>
-        {text}
-      </div>
+    <div className={className} ref={ref}>
+      {text}
     </div>
   );
 };

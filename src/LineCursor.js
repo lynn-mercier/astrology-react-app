@@ -7,15 +7,13 @@ const useStyles = createUseStyles({
     backgroundColor: '#FFF',
     height: 24,
     position: 'absolute',
-    right: 0,
-    top: 16
+    right: 0
   },
   cursor: {
     backgroundColor: '#C4C4C4',
     width: 10,
     height: 18,
-    position: 'absolute',
-    top: 19
+    position: 'absolute'
   }
 });
 

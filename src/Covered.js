@@ -12,9 +12,6 @@ const useStyles = createUseStyles({
     position: 'relative',
   },
   line: {
-    fontFamily: 'Roboto Mono',
-    lineHeight: '24px',
-    display: 'inline-block',
     '&:before': {
       display: 'inline-block',
       content: '""',

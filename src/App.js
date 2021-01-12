@@ -1,6 +1,18 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
+import {createUseStyles} from 'react-jss';
 import Covered from './Covered';
 import LineSplitter from './LineSplitter';
+
+
+const useStyles = createUseStyles({
+  root: {
+    fontFamily: 'Roboto Mono'
+  },
+  lineSplitter: {
+    width: 'calc(100% - 32px)',
+    marginLeft: 16
+  }
+});
 
 export default function App() {
   const [lineSplitterKey, setLineSplitterKey] = useState(0);
@@ -17,10 +29,17 @@ export default function App() {
     }
   };
 
+  const classes = useStyles();
+
   return (
-    <div>
+    <div className={classes.root}>
       <Covered lines={lines}/>
-      <LineSplitter key={lineSplitterKey} fullText={fullText} onLineSplit={onLineSplit}/>
+      <LineSplitter 
+        className={classes.lineSplitter} 
+        lineHeight={24}
+        key={lineSplitterKey}
+        fullText={fullText}
+        onLineSplit={onLineSplit}/>
     </div>
   );
 };
