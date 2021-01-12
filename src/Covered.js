@@ -35,18 +35,10 @@ const useStyles = createUseStyles({
       height: 32,
       verticalAlign: 0
     }
-  },
-  bottomCover: {
-    backgroundColor: '#FFF',
-    width: 'calc(100% - 32px)',
-    position: 'absolute',
-    top: 40
   }
 });
 
 export default function Convered(props) {
-  const [bottomCoverHeight, setBottomCoverHeight] = useState(24);
-  const [coverBottom, setCoverBottom] = useState(true);
   const [lineIndex, setLineIndex] = useState(0);
   const [linesPlaying, setLinesPlaying] = useState([]);
   const classes = useStyles();
@@ -68,20 +60,22 @@ export default function Convered(props) {
 
   const lineElements = lines.map((line, index) => {
     let onLineCursorComplete;
+
+    if (index === lines.length - 1) {
+      onLineCursorComplete = () => {}
+    } else {
+      onLineCursorComplete = () => {
+        setLineIndex(prevLineIndex => prevLineIndex + 1);
+      }
+    }
+
     let top;
     let className = classes.line;
 
     if (index === 0) {
       className += " "+classes.topLine;
-
-      onLineCursorComplete = () => {
-        setLineIndex(prevLineIndex => prevLineIndex + 1);
-        setCoverBottom(false);
-      }
-
       top = 16;
     } else {
-      onLineCursorComplete = () => {}
       top = 0;
     }
 
@@ -105,9 +99,6 @@ export default function Convered(props) {
   return (
     <div className={classes.root}>
       {lineElements}
-      {coverBottom &&
-        <div className={classes.bottomCover} style={{height: bottomCoverHeight}}/>
-      }
     </div>
   );
 };

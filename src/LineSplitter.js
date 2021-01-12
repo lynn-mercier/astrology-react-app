@@ -21,7 +21,7 @@ export default function LineSplitter(props) {
 
   useEffect(() => {
     if (ref.current && ref.current.offsetHeight < 24+1) {
-      if (spaceIndex < words.length) {
+      if (spaceIndex <= words.length) {
         setSpaceIndex(prevSpaceIndex => prevSpaceIndex + 1);
       } else if (!emittedLine) {
         onLineSplit(words.join(" "));
