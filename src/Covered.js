@@ -62,7 +62,9 @@ export default function Convered(props) {
     let onLineCursorComplete;
 
     if (index === lines.length - 1) {
-      onLineCursorComplete = () => {}
+      onLineCursorComplete = () => {
+        props.onComplete();
+      }
     } else {
       onLineCursorComplete = () => {
         setLineIndex(prevLineIndex => prevLineIndex + 1);
