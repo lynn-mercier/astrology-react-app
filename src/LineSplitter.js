@@ -42,7 +42,6 @@ export default function LineSplitter(props) {
 
   useEffect(() => {
     if (ref.current && ref.current.offsetHeight === 40) {
-      //console.log(spaceIndex);
       if (spaceIndex < words.length) {
         setSpaceIndex(prevSpaceIndex => prevSpaceIndex + 1);
       } else if (!emittedLine) {

@@ -7,10 +7,14 @@ const useStyles = createUseStyles({
     position: 'relative',
     marginLeft: 16
   },
+  lineContainer: {
+    display: 'inline-block',
+    position: 'relative',
+  },
   line: {
     fontFamily: 'Roboto Mono',
     lineHeight: '24px',
-    width: 'calc(100% - 32px)',
+    display: 'inline-block',
     '&:before': {
       display: 'inline-block',
       content: '""',
@@ -46,41 +50,58 @@ const useStyles = createUseStyles({
 
 export default function Convered(props) {
   const [coverBottom, setCoverBottom] = useState(true);
-  const [lineCursorTop, setLineCursorTop] = useState(16);
-  const [lineCursorKey, setLineCursorKey] = useState(0);
-  const [showLineCursor, setShowLineCursor] = useState(true);
+  const [showCursorTopLine, setShowCursorTopLine] = useState(true);
+  const [playingTopLine, setPlayingTopLine] = useState(true);
+  const [showCursorBottomLine, setShowCursorBottomLine] = useState(false);
+  const [playingBottomLine, setPlayingBottomLine] = useState(false);
   const classes = useStyles();
 
   const lineElements = props.lines.map((line, index) => {
+    let onLineCursorComplete;
+    let showCursor;
+    let playing;
+    let top;
     let className = classes.line;
 
     if (index === 0) {
       className += " "+classes.topLine;
-    }
 
-    return (<div key={index} className={className}>{line}</div>);
-  });
+      onLineCursorComplete = () => {
+        setCoverBottom(false);
+        setShowCursorTopLine(false);
+        setPlayingTopLine(false);
+        setShowCursorBottomLine(true);
+        setPlayingBottomLine(true);
+      }
 
-  const onLineCursorComplete = () => {
-    setCoverBottom(false);
-    setLineCursorTop(prevLineCursorTop => prevLineCursorTop + 24);
-
-    if (coverBottom) {
-      setLineCursorKey(prevLineCursorKey => prevLineCursorKey + 1);
+      showCursor = showCursorTopLine;
+      playing = playingTopLine;
+      top = 16;
     } else {
-      setShowLineCursor(false);
+      onLineCursorComplete = () => {
+        setPlayingBottomLine(false);
+      }
+
+      showCursor = showCursorBottomLine;
+      playing = playingBottomLine;
+      top = 0;
     }
-  };
+
+    return (
+      <div key={index} className={classes.lineContainer}>
+        <div className={className}>{line}</div>
+        <LineCursor 
+          onComplete={onLineCursorComplete}
+          showCursor={showCursor}
+          playing={playing}
+          top={top}/>
+      </div>
+    );
+  });
 
   return (
     <div className={classes.root}>
       {lineElements}
-      {showLineCursor && 
-        <LineCursor 
-          onComplete={onLineCursorComplete}
-          top={lineCursorTop}
-          key={lineCursorKey}/>
-      }
       {coverBottom &&
         <div className={classes.bottomCover}/>
       }

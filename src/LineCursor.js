@@ -6,13 +6,16 @@ const useStyles = createUseStyles({
   rightCover: {
     backgroundColor: '#FFF',
     height: 24,
-    position: 'absolute'
+    position: 'absolute',
+    right: 0,
+    top: 16
   },
   cursor: {
     backgroundColor: '#C4C4C4',
     width: 10,
     height: 18,
-    position: 'absolute'
+    position: 'absolute',
+    top: 19
   }
 });
 
@@ -22,15 +25,23 @@ export default function LineCursor(props) {
   const [emittedCompletedEvent, setEmittedCompletedEvent] = useState(false);
   const rightCoverRef = createRef();
   const onComplete = props.onComplete;
+  const playing = props.playing;
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCursorLeft(prevCursorLeft => prevCursorLeft + 10);
-    }, 25);
+    if (playing) {
+      const interval = setInterval(() => {
+        setCursorLeft(prevCursorLeft => prevCursorLeft + 10);
+      }, 25);
 
-    setIntervalInState(interval);
-    return () => clearInterval(interval);
-  }, [setIntervalInState]);
+      setIntervalInState(interval);
+    }
+  }, [playing]);
+
+  useEffect(() => {
+    if (intervalState) {
+      return () => clearInterval(intervalState);
+    }
+  }, [intervalState]);
 
   useEffect(() => {
     if (rightCoverRef.current && rightCoverRef.current.offsetWidth === 0) {
@@ -44,17 +55,15 @@ export default function LineCursor(props) {
   }, [rightCoverRef, intervalState, onComplete, emittedCompletedEvent]);
 
   const classes = useStyles();
-  const rightCoverWidthSubtraction = 32 + cursorLeft;
 
   const rightCoverStyle = {
-    width: "calc(100% - "+rightCoverWidthSubtraction+"px)",
     left: cursorLeft,
     top: props.top
   };
 
   const cursorStyle = {
     left: cursorLeft,
-    top: props.top + 3
+    top: props.top+3
   };
 
   return (
@@ -63,9 +72,11 @@ export default function LineCursor(props) {
         className={classes.rightCover}
         style={rightCoverStyle}
         ref={rightCoverRef}/>
-      <div 
+      {props.showCursor && 
+        <div 
         className={classes.cursor}
         style={cursorStyle}/>
+      }
     </div>
   );
 };
