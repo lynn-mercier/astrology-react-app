@@ -48,22 +48,22 @@ export default function Convered(props) {
   const [bottomCoverHeight, setBottomCoverHeight] = useState(24);
   const [coverBottom, setCoverBottom] = useState(true);
   const [lineIndex, setLineIndex] = useState(0);
-  const [linesStatus, setLinesStatus] = useState([]);
+  const [linesPlaying, setLinesPlaying] = useState([]);
   const classes = useStyles();
   const lines = props.lines;
 
   useEffect(() => {
-    const linesStatusTmp = [];
+    const linesPlaying = [];
 
     for (let i = 0; i < lines.length; i++) {
       if (i === lineIndex) {
-        linesStatusTmp.push({showCursor: true, playing: true});
+        linesPlaying.push({showCursor: true, playing: true});
       } else {
-        linesStatusTmp.push({showCursor: false, playing: false});
+        linesPlaying.push({showCursor: false, playing: false});
       }
     }
 
-    setLinesStatus(linesStatusTmp);
+    setLinesPlaying(linesPlaying);
   }, [lines, lineIndex]);
 
   const lineElements = lines.map((line, index) => {
@@ -81,22 +81,14 @@ export default function Convered(props) {
 
       top = 16;
     } else {
-      onLineCursorComplete = () => {
-        // setLinesStatus([
-        //   {showCursor: false, playing: false}, 
-        //   {showCursor: true, playing: false}
-        // ]);
-      }
-
+      onLineCursorComplete = () => {}
       top = 0;
     }
 
-    let showCursor = false;
     let playing = false;
 
-    if (linesStatus[index]) {
-      showCursor = linesStatus[index].showCursor;
-      playing = linesStatus[index].playing;
+    if (linesPlaying[index]) {
+      playing = linesPlaying[index].playing;
     }
 
     return (
@@ -104,7 +96,6 @@ export default function Convered(props) {
         <div className={className}>{line}</div>
         <LineCursor 
           onComplete={onLineCursorComplete}
-          showCursor={showCursor}
           playing={playing}
           top={top}/>
       </div>
