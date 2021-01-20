@@ -65,7 +65,7 @@ export default function LineCursor(props) {
         className={classes.rightCover}
         style={rightCoverStyle}
         ref={rightCoverRef}/>
-      {playing && 
+      {(props.showCursor && playing) && 
         <Cursor 
         left={cursorLeft}
         top={props.top}/>

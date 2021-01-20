@@ -49,9 +49,9 @@ export default function Convered(props) {
 
     for (let i = 0; i < lines.length; i++) {
       if (i === lineIndex) {
-        linesPlaying.push({showCursor: true, playing: true});
+        linesPlaying.push(true);
       } else {
-        linesPlaying.push({showCursor: false, playing: false});
+        linesPlaying.push(false);
       }
     }
 
@@ -84,13 +84,14 @@ export default function Convered(props) {
     let playing = false;
 
     if (linesPlaying[index]) {
-      playing = linesPlaying[index].playing;
+      playing = linesPlaying[index];
     }
 
     return (
       <div key={index} className={classes.lineContainer}>
         <div className={className}>{line}</div>
         <LineCursor 
+          showCursor={props.showCursor}
           onComplete={onLineCursorComplete}
           playing={playing}
           top={top}/>

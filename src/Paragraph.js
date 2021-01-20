@@ -20,6 +20,7 @@ export default function Paragraph(props) {
   const [lines, setLines] = useState([]);
 
   const onLineSplit = (line) => {
+    console.log(line);
     setLines(prevLins => lines.concat([line]));
     setFullText(fullText.replace(line, "").trim());
 
@@ -32,7 +33,7 @@ export default function Paragraph(props) {
 
   return (
     <div className={classes.root}>
-      <Covered lines={lines} onComplete={props.onComplete}/>
+      <Covered showCursor={props.showCursor} lines={lines} onComplete={props.onComplete}/>
       <LineSplitter 
         className={classes.lineSplitter} 
         lineHeight={24}

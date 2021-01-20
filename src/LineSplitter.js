@@ -1,5 +1,6 @@
 import {createUseStyles} from 'react-jss';
-import {useState, useEffect, createRef} from 'react';
+import {useState, useEffect} from 'react';
+import Measure from 'react-measure';
 
 const useStyles = createUseStyles({
   root: {
@@ -8,11 +9,12 @@ const useStyles = createUseStyles({
 });
 
 export default function LineSplitter(props) {
-  const ref = createRef();
+  const fullText = props.fullText;
   const words = props.fullText.split(" ");
   const [spaceIndex, setSpaceIndex] = useState(0);
   const [text, setText] = useState("");
   const [emittedLine, setEmittedLine] = useState(false);
+  const [intervalState, setIntervalInState] = useState(null);
   const onLineSplit = props.onLineSplit;
 
   useEffect(() => {
@@ -20,25 +22,47 @@ export default function LineSplitter(props) {
   }, [words, spaceIndex]);
 
   useEffect(() => {
-    if (ref.current && ref.current.offsetHeight < 24+1) {
-      if (spaceIndex <= words.length) {
-        setSpaceIndex(prevSpaceIndex => prevSpaceIndex + 1);
-      } else if (!emittedLine) {
-        onLineSplit(words.join(" "));
-        setEmittedLine(true);
-      }
-    } else if (!emittedLine) {
-      onLineSplit(words.slice(0, spaceIndex - 2).join(" "));
+    if (spaceIndex > words.length) {
+      clearInterval(intervalState);
+      onLineSplit(words.join(" "));
       setEmittedLine(true);
     }
-  }, [ref, text, words, spaceIndex, onLineSplit, emittedLine]);
+  }, [spaceIndex, words, intervalState, onLineSplit]);
+
+  useEffect(() => {
+    if (fullText !== "" && !intervalState) {
+      const interval = setInterval(() => {
+        setSpaceIndex((prevSpaceIndex) => prevSpaceIndex + 1);
+      }, 50);
+
+      setIntervalInState(interval);
+    }
+  }, [fullText, intervalState]);
+
+  useEffect(() => {
+    if (intervalState) {
+      return () => clearInterval(intervalState);
+    }
+  }, [intervalState]);
+
+  const onResize = (contentRect) => {
+    if (fullText !== "" && !emittedLine && contentRect.entry && contentRect.entry.height > 21) {
+      onLineSplit(words.slice(0, spaceIndex - 1).join(" "));
+      setEmittedLine(true);
+      clearInterval(intervalState);
+    }
+  }
 
   const classes = useStyles();
   const className = classes.root+" "+props.className;
 
   return (
-    <div className={className} ref={ref}>
-      {text}
-    </div>
+    <Measure onResize={onResize}>
+    {({ measureRef }) => (
+      <div className={className} ref={measureRef}>
+        {text}
+      </div>
+    )}
+    </Measure>
   );
 };
