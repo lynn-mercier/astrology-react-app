@@ -1,6 +1,7 @@
 
 import {createUseStyles} from 'react-jss';
 import {useEffect, useState, createRef} from 'react';
+import Cursor from './Cursor';
 
 const useStyles = createUseStyles({
   rightCover: {
@@ -8,12 +9,6 @@ const useStyles = createUseStyles({
     height: 24,
     position: 'absolute',
     right: 0
-  },
-  cursor: {
-    backgroundColor: '#C4C4C4',
-    width: 10,
-    height: 18,
-    position: 'absolute'
   }
 });
 
@@ -29,7 +24,7 @@ export default function LineCursor(props) {
     if (playing) {
       const interval = setInterval(() => {
         setCursorLeft(prevCursorLeft => prevCursorLeft + 10);
-      }, 25);
+      }, 35);
 
       setIntervalInState(interval);
     }
@@ -71,9 +66,9 @@ export default function LineCursor(props) {
         style={rightCoverStyle}
         ref={rightCoverRef}/>
       {playing && 
-        <div 
-        className={classes.cursor}
-        style={cursorStyle}/>
+        <Cursor 
+        left={cursorLeft}
+        top={props.top}/>
       }
     </div>
   );

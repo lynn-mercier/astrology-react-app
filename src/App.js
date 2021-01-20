@@ -1,15 +1,22 @@
+import {useState} from 'react';
 import Paragraph from './Paragraph';
 
 export default function App() {
+  const [showSecondParagraph, setShowSecondParagraph] = useState(false); 
+
   const onParagraphComplete = () => {
-    console.log("Paragraph completed");
+    setShowSecondParagraph(true);
   }
 
   return (
     <div>
       <Paragraph 
-        fullText="Hi, I’m an A.I. trained to evaluate musical taste. To get started, I’ll need to see your Spotify."
+        fullText="Hi there. I want to tell you about astrology."
         onComplete={onParagraphComplete}/>
+      {showSecondParagraph && 
+        <Paragraph 
+        fullText="I’m sure you already know there are 12 signs. Half of those signs are YANG, and half are YIN."
+        onComplete={onParagraphComplete}/>}
     </div>
   );
 };
