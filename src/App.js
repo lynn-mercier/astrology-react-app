@@ -17,7 +17,7 @@ export default function App() {
       {showSecondParagraph && 
         <Paragraph 
         showCursor={true}
-        fullText="I’m sure you already know there are 12 signs. Half of those signs are YANG, and half are YIN."
+        fullText="I’m sure you already know there are 12 signs. But did you know that half of those signs are YANG, and half are YIN?"
         onComplete={onParagraphComplete}/>}
     </div>
   );
