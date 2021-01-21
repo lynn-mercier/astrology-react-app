@@ -7,10 +7,6 @@ import LineSplitter from './LineSplitter';
 const useStyles = createUseStyles({
   root: {
     fontFamily: 'Roboto Mono'
-  },
-  lineSplitter: {
-    width: 'calc(100% - 32px)',
-    marginLeft: 16
   }
 });
 
@@ -30,12 +26,16 @@ export default function Paragraph(props) {
   };
 
   const classes = useStyles();
+  const className = classes.root+" "+props.className;
 
   return (
-    <div className={classes.root}>
-      <Covered showCursor={props.showCursor} lines={lines} onComplete={props.onComplete}/>
-      <LineSplitter 
-        className={classes.lineSplitter} 
+    <div className={className}>
+      <Covered 
+        showCursor={props.showCursor} 
+        lines={lines} 
+        onComplete={props.onComplete}
+        playing={props.playing}/>
+      <LineSplitter
         lineHeight={24}
         key={lineSplitterKey}
         fullText={fullText}

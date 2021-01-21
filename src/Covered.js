@@ -5,7 +5,6 @@ import LineCursor from './LineCursor';
 const useStyles = createUseStyles({
   root: {
     position: 'relative',
-    marginLeft: 16
   },
   lineContainer: {
     display: 'inline-block',
@@ -87,7 +86,7 @@ export default function Convered(props) {
 
     let playing = false;
 
-    if (linesPlaying[index]) {
+    if (props.playing && linesPlaying[index]) {
       playing = linesPlaying[index];
     }
 

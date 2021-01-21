@@ -54,12 +54,11 @@ export default function LineSplitter(props) {
   }
 
   const classes = useStyles();
-  const className = classes.root+" "+props.className;
 
   return (
     <Measure onResize={onResize}>
     {({ measureRef }) => (
-      <div className={className} ref={measureRef}>
+      <div className={classes.root} ref={measureRef}>
         {text}
       </div>
     )}
