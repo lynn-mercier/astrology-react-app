@@ -47,9 +47,9 @@ export default function ImageSection(props) {
       <img src={props.imageSrc} alt={props.imageAlt} className={classes.svg}/>
       <CursorParagraph
         className={paragraphClass} 
-        showCursor={true}
+        showCursor={props.showCursor}
         fullText={props.fullText}
-        onComplete={() => {}}
+        onComplete={props.onComplete}
         playing={showParagraph}/>
     </div>
   );
