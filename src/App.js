@@ -5,7 +5,9 @@ export default function App() {
   const [showSecondParagraph, setShowSecondParagraph] = useState(false); 
 
   const onParagraphComplete = () => {
-    setShowSecondParagraph(true);
+    setTimeout(() => {
+      setShowSecondParagraph(true);
+    }, 1000);
   }
 
   return (
