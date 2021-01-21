@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {createUseStyles} from 'react-jss';
+import Button from '@material-ui/core/Button';
 import CursorParagraph from './cursor-paragraph';
 import ImageSection from './ImageSection';
 import yangSvg from './yang.svg';
@@ -20,21 +21,38 @@ const useStyles = createUseStyles({
   fourthSection: {
     marginTop: 8
   },
-  fifthParagraph: {
+  fifthSection: {
     marginTop: 8,
     width: 'calc(100% - 32px)',
-    marginLeft: 16
+    marginLeft: 16,
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  button: {
+    alignSelf: 'flex-end',
+    animation: '$fadeIn ease 1s'
+  },
+  '@keyframes fadeIn': {
+    '0%': {opacity: 0},
+    '100%': {opacity: 1}
   }
 });
 
 export default function App() {
   const [lastParagraphShowingIndex, setLastParagraphShowingIndex] = useState(0);
+  const [showButton, setShowButton] = useState(false);
 
   const onParagraphComplete = () => {
     setTimeout(() => {
       setLastParagraphShowingIndex(prevLastParaShowingIndex => prevLastParaShowingIndex + 1);
     }, 1000);
   };
+
+  const onLastParagraphComplete = () => {
+    setTimeout(() => {
+      setShowButton(true);
+    }, 1000);
+  }
 
   const classes = useStyles();
 
@@ -77,13 +95,17 @@ export default function App() {
           />
       }
       {(lastParagraphShowingIndex > 3) && 
-        <CursorParagraph 
-          className={classes.fifthParagraph} 
-          showCursor={true}
-          fullText="The 12 signs can also be grouped as OBJECTIVITY and SUBJECTIVITY. Would you like to know more?"
-          onComplete={() => {}}
-          playing={true}
-          />
+        <div className={classes.fifthSection}>
+          <CursorParagraph
+            showCursor={!showButton}
+            fullText="The 12 signs can also be grouped as OBJECTIVITY and SUBJECTIVITY. Would you like to know more?"
+            onComplete={onLastParagraphComplete}
+            playing={true}
+            />
+          {showButton && 
+            <Button className={classes.button}>Continue</Button>
+          }
+        </div>
       }
     </div>
   );
