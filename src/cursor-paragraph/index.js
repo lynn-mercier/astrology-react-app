@@ -16,6 +16,10 @@ export default function CursorParagraph(props) {
   const [lines, setLines] = useState([]);
 
   const onLineSplit = (line) => {
+    if (line.trim() === "") {
+      return;
+    }
+    
     console.log(line);
     setLines(prevLins => lines.concat([line]));
     setFullText(fullText.replace(line, "").trim());
