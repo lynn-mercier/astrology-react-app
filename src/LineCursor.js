@@ -51,12 +51,7 @@ export default function LineCursor(props) {
 
   const rightCoverStyle = {
     left: cursorLeft,
-    top: props.top
-  };
-
-  const cursorStyle = {
-    left: cursorLeft,
-    top: props.top+3
+    top: props.top + props.marginTop,
   };
 
   return (
@@ -68,7 +63,7 @@ export default function LineCursor(props) {
       {(props.showCursor && playing) && 
         <Cursor 
         left={cursorLeft}
-        top={props.top}/>
+        top={props.top + props.marginTop}/>
       }
     </div>
   );

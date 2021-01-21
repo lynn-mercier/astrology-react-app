@@ -10,13 +10,14 @@ const useStyles = createUseStyles({
   lineContainer: {
     display: 'inline-block',
     position: 'relative',
+    marginTop: -8
   },
   line: {
     '&:before': {
       display: 'inline-block',
       content: '""',
       width: 0,
-      height: 16,
+      height: 24,
       verticalAlign: 0
     },
     '&:after': {
@@ -72,13 +73,16 @@ export default function Convered(props) {
     }
 
     let top;
+    let marginTop;
     let className = classes.line;
 
     if (index === 0) {
       className += " "+classes.topLine;
       top = 16;
+      marginTop = 0;
     } else {
       top = 0;
+      marginTop = 8;
     }
 
     let playing = false;
@@ -94,7 +98,8 @@ export default function Convered(props) {
           showCursor={props.showCursor}
           onComplete={onLineCursorComplete}
           playing={playing}
-          top={top}/>
+          top={top}
+          marginTop={marginTop}/>
       </div>
     );
   });
