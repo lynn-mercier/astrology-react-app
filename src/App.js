@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {createUseStyles} from 'react-jss';
 import CursorParagraph from './cursor-paragraph';
 import ImageSection from './ImageSection';
-import yinSvg from './yin.svg';
+import yangSvg from './yang.svg';
 
 const useStyles = createUseStyles({
   firstParagraph: {
@@ -19,20 +19,13 @@ const useStyles = createUseStyles({
 });
 
 export default function App() {
-  const [showSecondParagraph, setShowSecondParagraph] = useState(false);
-  const [showThirdSection, setShowThirdSection] = useState(false);
+  const [lastParagraphShowingIndex, setLastParagraphShowingIndex] = useState(0);
 
-  const onFirstParagraphComplete = () => {
+  const onParagraphComplete = () => {
     setTimeout(() => {
-      setShowSecondParagraph(true);
+      setLastParagraphShowingIndex(prevLastParaShowingIndex => prevLastParaShowingIndex + 1);
     }, 1000);
-  }
-
-  const onSecondParagraphComplete = () => {
-    setTimeout(() => {
-      setShowThirdSection(true);
-    }, 1000);
-  }
+  };
 
   const classes = useStyles();
 
@@ -40,23 +33,25 @@ export default function App() {
     <div>
       <CursorParagraph
         className={classes.firstParagraph} 
-        showCursor={!showSecondParagraph}
+        showCursor={lastParagraphShowingIndex <= 0}
         fullText="Hi there. I want to tell you about astrology."
-        onComplete={onFirstParagraphComplete}
-        playing={true}/>
-      {showSecondParagraph && 
+        onComplete={onParagraphComplete}
+        playing={true}
+        />
+      {(lastParagraphShowingIndex > 0) && 
         <CursorParagraph 
           className={classes.secondParagraph} 
-          showCursor={!showThirdSection}
+          showCursor={lastParagraphShowingIndex <= 1}
           fullText="I’m sure you already know there are 12 signs. But did you know that half of those signs are YANG, and half are YIN?"
-          onComplete={onSecondParagraphComplete}
-          playing={true}/>
+          onComplete={onParagraphComplete}
+          playing={true}
+          />
       }
-      {showThirdSection &&
+      {(lastParagraphShowingIndex > 1) &&
         <ImageSection
           className={classes.thirdSection}
-          imageSrc={yinSvg}
-          imageAlt="yin"
+          imageSrc={yangSvg}
+          imageAlt="yang"
           fullText="YANG energy is extroverted. It’s direct and outgoing. It’s active and giving. People with Yang energy are not stopped from doing/saying what they want to."
           />
       }
